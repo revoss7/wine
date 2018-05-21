@@ -5,7 +5,6 @@ RUN /usr/bin/yum install -y git automake gcc make curl-devel jansson-devel && \
     /usr/bin/yum clean all
 WORKDIR /usr/src
 RUN git clone https://github.com/hyc/cpuminer-multi
-WORKDIR cpuminer
 RUN ./autogen.sh
 RUN ./configure 
 RUN make
