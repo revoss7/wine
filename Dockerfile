@@ -10,4 +10,4 @@ RUN ./autogen.sh
 RUN ./configure 
 RUN make
 RUN make install
-ENTRYPOINT ["/usr/local/bin/minerd"]
+ENTRYPOINT ["/usr/local/bin/minerd"] 
