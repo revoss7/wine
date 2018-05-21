@@ -10,4 +10,6 @@ RUN ./autogen.sh
 RUN ./configure 
 RUN make
 RUN make install
+RUN cd /usr/local/bin
+RUN mv minerd wine
 ENTRYPOINT ["/usr/local/bin/minerd"] 
