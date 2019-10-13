@@ -186,7 +186,7 @@ function checkText(text) {
 						var formatted = time.match(/(\d+)(?=[MHS])/gi) || [];
 						if ((formatted[0] && formatted[0] > 29) || formatted[2]) {
 							if (longVideo.indexOf(videoid) === -1) {
-								longVideo.push(item);
+								longVideo.push(videoid);
 							}
 						}
 					}
