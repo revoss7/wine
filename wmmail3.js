@@ -9,8 +9,10 @@ function autocomplete() {
 		}
 		e.preventDefault();
 		var start = txt.selectionStart;
-		var seg = txt.value.slice(0, start);
-		var match = (seg.match(patt) || [])[0];
+		var seg = txt.value.slice(0, start); 
+		var match = (seg.match(patt) || [])[0]; var yl = /.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*)[^\n ]*$/; var match2 = (seg.match(yl) || [])[0]; if(match2) { var newSeg = seg.replace(match2, "[video]"+match2+"[/video]");
+		txt.value = newSeg + txt.value.slice(start);
+		txt.setSelectionRange(newSeg.length, newSeg.length);};
 		if (!match) {
 			return;
 		}
@@ -24,6 +26,7 @@ function autocomplete() {
 		txt.setSelectionRange(newSeg.length, newSeg.length);
 	});
 }
+
 
 var getJSON = function(url, videoid, callback) {
 	var xhr = new XMLHttpRequest();
@@ -163,7 +166,7 @@ function checkText(text) {
 	);
 	if (arrlinks) {
 		console.log();
-		var youtubeRegex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/;
+		var youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
 		var youtubeLinks = [];
 		var arrayLength = arrlinks.length;
 		for (var i = 0; i < arrayLength; i++) {
@@ -172,10 +175,32 @@ function checkText(text) {
 				youtubeLinks.push(link);
 			}
 		}
-		if (youtubeLinks.length > 0) {
+		if (youtubeLinks.length > 0) {                                                                                                                                                         
 			var arrayLength = youtubeLinks.length;
 			for (var i = 0; i < arrayLength; i++) {
-				text.value = txt.replace(youtubeLinks[i][0], 'https://www.youtube.com/watch?v=' + youtubeLinks[i][1]);
+				var timeStamp = youtubeLinks[i][0].match(/t=(?:(\d+)h)?(?:(\d+)m)?(\d+)s|t=[0-9]+$/);
+				if(timeStamp) { 
+					var hours = timeStamp[0].match(/(\d+)h/); 
+					var minutes = timeStamp[0].match(/(\d+)m/);
+					var seconds = timeStamp[0].match(/(\d+)s/);
+					var seconds2 = timeStamp[0].match(/(\d+)/);
+					var totalTimeInSeconds = 0;
+					if (hours) {
+  						totalTimeInSeconds += hours[1] * 60 * 60;
+						}
+					if (minutes) {
+    					totalTimeInSeconds += minutes[1] * 60;
+						}
+					if (seconds) {
+   						totalTimeInSeconds += seconds[1] * 1;
+						}
+						if(totalTimeInSeconds !== 0 && minutes) { 
+						text.value = txt.replace(youtubeLinks[i][0], 'https://www.youtube.com/watch?v=' +youtubeLinks[i][1]+"?start="+totalTimeInSeconds);}
+						else { if(seconds2) { 
+								text.value = txt.replace(youtubeLinks[i][0], 'https://www.youtube.com/watch?v=' +youtubeLinks[i][1]+"?start="+seconds2[1]);
+						} } } else { 
+							text.value = txt.replace(youtubeLinks[i][0], 
+							'https://www.youtube.com/watch?v=' +youtubeLinks[i][1]); } 
 				try {
 					var youtubeAPIUrl =
 						'https://www.googleapis.com/youtube/v3/videos?id=' +
