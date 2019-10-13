@@ -107,7 +107,7 @@ function checkBeforeSend(formElem) {
 			var regEx = new RegExp(longVideo[i].replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'), 'g');
 			text.value = text.value.replace(regEx, '');
 		}
-		longVideo = false;
+		longVideo = [];
 	} else {
 		formElem.submit();
 	}
@@ -125,7 +125,7 @@ function checkBeforeSendUseCtrlEnter(event, formElem) {
 				var regEx = new RegExp(longVideo[i].replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'), 'g');
 				text.value = text.value.replace(regEx, '');
 			}
-			longVideo = false;
+			longVideo = [];
 		} else {
 			if (gebi('comm').value == '') {
 				alert('Ошибка! Не указан комментарий!');
